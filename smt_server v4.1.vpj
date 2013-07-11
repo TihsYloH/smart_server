@@ -1,0 +1,150 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+    Version="10.0"
+    VendorName="SlickEdit"
+    TemplateName="Python - Empty Project"
+    WorkingDir=".">
+    <Files>
+        <Folder
+            Name="Source Files"
+            Filters="*.py"/>
+        <Folder
+            Name="Other Files"
+            Filters="">
+            <F N="src/test/a.out"/>
+            <F N="src/test/epoll/a.out"/>
+            <F N="src/test/timer/a.out"/>
+            <F N="src/buffer.c"/>
+            <F N="src/buffer.h"/>
+            <F N="src/data_server"/>
+            <F N="src/DEBUG.h"/>
+            <F N="src/test/epoll/epoll_test"/>
+            <F N="src/test/epoll/epoll_test.c"/>
+            <F N="src/test/epoll/epoll_test.h"/>
+            <F N="src/test/iic"/>
+            <F N="src/iic.c"/>
+            <F N="src/test/iic.c"/>
+            <F N="src/iic.h"/>
+            <F N="src/test/iic.h"/>
+            <F N="src/test/iic_test"/>
+            <F N="src/intelligent.c"/>
+            <F N="lib/arm/libsqlite3.a"/>
+            <F N="src/test/list.h"/>
+            <F N="src/test/timer/list.h"/>
+            <F N="src/log.c"/>
+            <F N="src/log.h"/>
+            <F N="src/test/main.c"/>
+            <F
+                N="Makefile"
+                Type="Makefile"/>
+            <F
+                N="src/Makefile"
+                Type="Makefile"/>
+            <F N="src/net_config.c"/>
+            <F N="src/net_config.h"/>
+            <F N="src/segvCatch.h"/>
+            <F N="src/serial.c"/>
+            <F N="src/serial.h"/>
+            <F N="server.config"/>
+            <F N="server.creator"/>
+            <F N="server.creator.user"/>
+            <F N="server.creator.user.1.3"/>
+            <F N="server.creator.user.2.5pre1"/>
+            <F N="server.files"/>
+            <F N="server.includes"/>
+            <F N="server_eopll.config"/>
+            <F N="server_eopll.creator"/>
+            <F N="server_eopll.creator.user"/>
+            <F N="server_eopll.creator.user.1.3"/>
+            <F N="server_eopll.files"/>
+            <F N="server_eopll.includes"/>
+            <F N="server_single.config"/>
+            <F N="server_single.creator"/>
+            <F N="server_single.creator.user"/>
+            <F N="server_single.creator.user.2.5pre1"/>
+            <F N="server_single.files"/>
+            <F N="server_single.includes"/>
+            <F N="server_single.vpj"/>
+            <F N="server_single.vpw"/>
+            <F N="server_single.vpwhist"/>
+            <F N="server_single.vtg"/>
+            <F N="smt_server v4.1.vpj"/>
+            <F N="smt_server v4.1.vpw"/>
+            <F N="smt_server v4.1.vpwhist"/>
+            <F N="include/sqlite3.h"/>
+            <F N="src/sqlite3_help"/>
+            <F N="src/tcp_server.c"/>
+            <F N="src/tcp_server.h"/>
+            <F N="src/test/test"/>
+            <F N="src/test/testList.c"/>
+            <F N="src/test/timer/testList.c"/>
+            <F N="src/test/testThread.c"/>
+            <F N="src/test/thread"/>
+            <F N="src/test/thread_test.c"/>
+            <F N="src/test/timer.c"/>
+            <F N="src/test/timer/timer.c"/>
+            <F N="src/test/timer.h"/>
+            <F N="src/test/timer/timer.h"/>
+        </Folder>
+    </Files>
+    <Config
+        Name="Debug"
+        DebugCallbackName="pydbgp"
+        Type="python"
+        OutputFile=""
+        AppType="python"
+        CompilerConfigName="">
+        <Menu>
+            <Target
+                Name="Execute"
+                MenuCaption="E&amp;xecute"
+                Dialog="_python_options_form Run"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone"
+                RunFromDir="%rw"
+                Deletable="0">
+                <Exec CmdLine='python %(SLICKEDIT_PYTHON_EXECUTE_ARGS) "%f"'/>
+            </Target>
+            <Target
+                Name="Debug"
+                MenuCaption="&amp;Debug"
+                Dialog="_python_options_form Debug"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone"
+                RunFromDir="%rw"
+                Deletable="0">
+                <Exec
+                    CmdLine="python_debug"
+                    Type="Slick-C"/>
+            </Target>
+            <Target
+                Name="Python Options"
+                MenuCaption="Python &amp;Options"
+                ShowOnMenu="HideIfNoCmdLine"
+                Deletable="0">
+                <Exec
+                    CmdLine="pythonoptions"
+                    Type="Slick-C"/>
+            </Target>
+        </Menu>
+        <List Name="Python Options">
+            <Item
+                Name="DefaultFile"
+                Value=""/>
+        </List>
+        <List Name="pydbgp Options">
+            <Item
+                Name="ServerHost"
+                Value="127.0.0.1"/>
+            <Item
+                Name="ServerPort"
+                Value="0"/>
+            <Item
+                Name="ListenInBackground"
+                Value="1"/>
+            <Item
+                Name="show_hidden"
+                Value="0"/>
+        </List>
+    </Config>
+</Project>

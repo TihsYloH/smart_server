@@ -1,0 +1,241 @@
+
+//打开一个数据库  返回 SQLITE_OK  操作正常
+int sqlite3_open( 文件名, sqlite3 ** );
+
+    文件名     sqlite3 * 句柄
+
+//关闭数据库
+int sqlite3_close(sqlite3 *);
+
+
+
+第1个参数不再说了，是前面open函数得到的指针。说了是关键数据结构。
+第2个参数const char *sql 是一条 sql 语句，以/0结尾。
+第3个参数sqlite3_callback 是回调，当这条语句执行之后，sqlite3会去调用你提供的这个函数。（什么是回调函数，自己找别的资料学习）
+第4个参数void * 是你所提供的指针，你可以传递任何一个指针参数到这里，这个参数最终会传到回调函数里面，如果不需要传递指针给回调函数，
+可以填NULL。等下我们再看回调函数的写法，以及这个参数的使用。
+第5个参数char ** errmsg 是错误信息。注意是指针的指针。sqlite3里面
+有很多固定的错误信息。执行 sqlite3_exec 之后，执行失败时可以查阅这个指针（直接 printf(“%s/n”,errmsg)）得到一串字符串
+信息，这串信息告诉你错在什么地方。sqlite3_exec函数通过修改你传入的指针的指针，把你提供的指针指向错误提示信息，这样sqlite3_exec
+函数外面就可以通过这个 char*得到具体错误提示。
+说明：通常，sqlite3_callback 和它后面的 void * 这两个位置都可以填 NULL。填NULL表示你不需要回调。比如你做 insert 操作，
+做 delete 操作，就没有必要使用回调。而当你做 select 时，就要使用回调，因为 sqlite3 把数据查出来，得通过回调告诉你查出了什么数据。
+
+int sqlite3_exec(sqlite3*, const char *sql, sqlite3_callback, void *, char **errmsg );
+
+exec 回调
+int LoadMyInfo( void * para, int n_column, char ** column_value, char ** column_name )
+{
+//para是你在 sqlite3_exec 里传入的 void * 参数
+//通过para参数，你可以传入一些特殊的指针（比如类指针、结构指针），
+然后在这里面强制转换成对应的类型（这里面是void*类型，必须强制转换成你的类型才可用）。然后操作这些数据
+//n_column是这一条记录有多少个字段 (即这条记录有多少列)
+// char ** column_value 是个关键值，查出来的数据都保存在这里，它实际上是个1维数组（不要以为是2维数组），
+每一个元素都是一个 char * 值，是一个字段内容（用字符串来表示，以/0结尾）
+//char ** column_name 跟 column_value是对应的，表示这个字段的字段名称
+//这里，我不使用 para 参数。忽略它的存在.
+typedef int (*sqlite3_callback)(void*,int,char**, char**);
+
+
+//数据库操作代码
+//创建一个测试表，表名叫 MyTable_1，有2个字段： ID 和 name。其中ID是一个自动增加的类型，以后insert时可以不去指定这个字段，它会自己从0开始增加
+result = sqlite3_exec( db, “create table MyTable_1( ID integer primary key autoincrement, name nvarchar(32) )”, NULL, NULL, errmsg );
+if(result != SQLITE_OK )
+{
+printf( “创建表失败，错误码:%d，错误原因:%s/n”, result, errmsg );
+}
+//插入一些记录
+result = sqlite3_exec( db, “insert into MyTable_1( name ) values ( ‘走路’ )”, 0, 0, errmsg );
+if(result != SQLITE_OK )
+{
+printf( “插入记录失败，错误码:%d，错误原因:%s/n”, result, errmsg );
+}
+result = sqlite3_exec( db, “insert into MyTable_1( name ) values ( ‘骑单车’ )”, 0, 0, errmsg );
+if(result != SQLITE_OK )
+{
+printf( “插入记录失败，错误码:%d，错误原因:%s/n”, result, errmsg );
+}
+result = sqlite3_exec( db, “insert into MyTable_1( name ) values ( ‘坐汽车’ )”, 0, 0, errmsg );
+if(result != SQLITE_OK )
+{
+printf( “插入记录失败，错误码:%d，错误原因:%s/n”, result, errmsg );
+}
+//开始查询数据库
+result = sqlite3_exec( db, “select * from MyTable_1”, LoadMyInfo, NULL, errmsg );
+
+
+
+
+不使用回调函数查询sqlite数据库
+int sqlite3_get_table(sqlite3*, const char *sql, char ***resultp, int *nrow, int *ncolumn, char **errmsg );
+
+第1个参数不再多说，看前面的例子。
+第2个参数是 sql 语句，跟 sqlite3_exec 里的 sql 是一样的。是一个很普通的以/0结尾的char *字符串。
+第3个参数是查询结果，它依然一维数组（不要以为是二维数组，更不要以为是三维数组）。它内存布局是：第一行是字段名称，
+后面是紧接着是每个字段的值。下面用例子来说事。
+第4个参数是查询出多少条记录（即查出多少行）。
+第5个参数是多少个字段（多少列）。
+第6个参数是错误信息，跟前面一样，这里不多说了。
+result = sqlite3_get_table( db, “select * from MyTable_1”, &dbResult, &nRow, &nColumn, &errmsg );
+if( SQLITE_OK == result )
+{
+//查询成功
+index = nColumn; //前面说过 dbResult 前面第一行数据是字段名称，从 nColumn 索引开始才是真正的数据
+printf( “查到%d条记录/n”, nRow );
+for( i = 0; i < nRow ; i++ )
+{
+printf( “第 %d 条记录/n”, i+1 );
+for( j = 0 ; j < nColumn; j++ )
+{
+printf( “字段名:%s ß> 字段值:%s/n”, dbResult[j], dbResult [index] );
+++index; // dbResult 的字段值是连续的，从第0索引到第 nColumn - 1索引都是字段名称，从第 nColumn 索引开始，
+            后面都是字段值，它把一个二维的表（传统的行列表示法）用一个扁平的形式来表示
+}
+printf( “-------/n” );
+}
+}
+
+
+
+
+操作二进制数据
+sqlite 操作二进制数据需要用一个辅助的数据类型：sqlite3_stmt * 。
+这个数据类型记录了一个“sql语句”。
+
+写入二进制步骤
+要插入二进制，前提是这个表的字段的类型是 blob 类型。我假设有这么一张表：
+create table Tbl_2( ID integer, file_content blob )
+
+首先声明
+sqlite3_stmt * stat;
+然后，把一个 sql 语句解析到 stat 结构里去：
+sqlite3_prepare( db, “insert into Tbl_2( ID, file_content) values( 10, ? )”, -1, &stat, 0 );
+
+上面的函数完成 sql 语句的解析。第一个参数跟前面一样，是个 sqlite3 * 类型变量，第二个参数是一个 sql 语句。
+
+这个 sql 语句特别之处在于 values 里面有个 ? 号。在sqlite3_prepare函数里，?号表示一个未定的值，它的值等下才插入。
+第三个参数我写的是-1，这个参数含义是前面 sql 语句的长度。如果小于0，sqlite会自动计算它的长度（把sql语句当成以/0结尾的字符串）。
+
+第四个参数是 sqlite3_stmt 的指针的指针。解析以后的sql语句就放在这个结构里。
+
+第五个参数， 为0就可以了。
+
+如果这个函数执行成功（返回值是 SQLITE_OK 且 stat 不为NULL ），那么下面就可以开始插入二进制数据。
+sqlite3_bind_blob( stat, 1, pdata, (int)(length_of_data_in_bytes), NULL ); // pdata为数据缓冲区，
+length_of_data_in_bytes为数据大小，以字节为单位
+这个函数一共有5个参数。
+第1个参数：是前面prepare得到的 sqlite3_stmt * 类型变量。
+第2个参数：?号的索引。前面prepare的sql语句里有一个?号，假如有多个?号怎么插入？方法就是改变 bind_blob 函数第2个参数。
+这个参数我写1，表示这里插入的值要替换 stat 的第一个?号（这里的索引从1开始计数，而非从0开始）。如果你有多个?号，就写多个
+bind_blob 语句，并改变它们的第2个参数就替换到不同的?号。如果有?号没有替换，sqlite为它取值null。
+第3个参数：二进制数据起始指针。
+第4个参数：二进制数据的长度，以字节为单位。
+第5个参数：是个析够回调函数，告诉sqlite当把数据处理完后调用此函数来析够你的数据。这个参数我还没有使用过，因此理解也不深刻。
+但是一般都填NULL，需要释放的内存自己用代码来释放。
+bind完了之后，二进制数据就进入了你的“sql语句”里了。你现在可以把它保存到数据库里：
+int result = sqlite3_step( stat );
+通过这个语句，stat 表示的sql语句就被写到了数据库里。
+最后，要把 sqlite3_stmt 结构给释放：
+sqlite3_finalize( stat ); //把刚才分配的内容析构掉
+
+跟前面一样，先声明 sqlite3_stmt * 类型变量：
+sqlite3_stmt * stat;
+然后，把一个 sql 语句解析到 stat 结构里去：
+sqlite3_prepare( db, “select * from Tbl_2”, -1, &stat, 0 );
+当 prepare 成功之后（返回值是 SQLITE_OK ），开始查询数据。
+int result = sqlite3_step( stat );
+这一句的返回值是 SQLITE_ROW 时表示成功（不是 SQLITE_OK ）。
+你可以循环执行 sqlite3_step 函数，一次 step 查询出一条记录。直到返回值不为 SQLITE_ROW 时表示查询结束。
+然后开始获取第一个字段：ID 的值。ID是个整数，用下面这个语句获取它的值：
+int id = sqlite3_column_int( stat, 0 ); //第2个参数表示获取第几个字段内容，从0开始计算，因为我的表的ID字段是第一个字段，因此这里我填0
+下面开始获取 file_content 的值，因为 file_content 是二进制，因此我需要得到它的指针，还有它的长度：
+const void * pFileContent = sqlite3_column_blob( stat, 1 );
+int len = sqlite3_column_bytes( stat, 1 );
+这样就得到了二进制的值。
+把 pFileContent 的内容保存出来之后，不要忘了释放 sqlite3_stmt 结构：
+sqlite3_finalize( stat ); //把刚才分配的内容析构掉
+
+
+如果你需要重复使用 sqlite3_prepare 解析好的 sqlite3_stmt 结构，需要用函数： sqlite3_reset。
+result = sqlite3_reset(stat);
+
+
+
+（4） 事务处理
+sqlite 是支持事务处理的。如果你知道你要同步删除很多数据，不仿把它们做成一个统一的事务。
+通常一次 sqlite3_exec 就是一次事务，如果你要删除1万条数据，sqlite就做了1万次：
+开始新事务->删除一条数据->提交事务->开始新事务->… 的过程。这个操作是很慢的。因为时间都花在了开始事务、提交事务上。
+你可以把这些同类操作做成一个事务，这样如果操作错误，还能够回滚事务。
+事务的操作没有特别的接口函数，它就是一个普通的 sql 语句而已：
+分别如下：
+int result;
+result = sqlite3_exec( db, "begin transaction", 0, 0, &zErrorMsg ); //开始一个事务
+result = sqlite3_exec( db, "commit transaction", 0, 0, &zErrorMsg ); //提交事务
+result = sqlite3_exec( db, "rollback transaction", 0, 0, &zErrorMsg ); //回滚事务
+
+ret = sqlite3_exec ( db , "begin transaction" , 0 , 0 ,& zErrorMsg );
+for (...)
+{
+  //insert into operate
+
+
+  // 如果操作错误
+
+ ret = sqlite3_exec ( db , "rollback transaction" , 0 , 0 , & zErrorMsg )
+}
+ret = sqlite3_exec ( db , "commit transaction" , 0 , 0 , & zErrorMsg );
+
+
+
+
+常用SQL语句
+
+"CREATE TABLE FEED_TABLE(FeedID TEXT, Title TEXT, Summary TEXT, Author TEXT,
+            ImageName VARCHAR(21), ImageType TEXT, MaxIndex INT, ImageData BLOB)"
+
+//查询记录
+
+
+
+"select * form 'table_name'"
+
+
+
+
+"select * form 'table name' where value = '?'"
+
+
+"INSERT INTO FEED_TABLE(FeedID, Title, Summary, ImageName, ImageType, MaxIndex)
+                                VALUES('%s', '%s', '%s', '%s', '%s', %d)"
+
+//更新记录
+
+
+
+"update 'table_name' 'column_name' = 'value'"
+
+
+
+
+
+//删除记录
+
+
+"DELETE FROM FAVORITE_TABLE WHERE EntryIndex = %d"
+//删除所有记录
+"delete from 'table_name'"
+//删除表
+"drop table 'table_name'"
+//查询表结构
+"select sql from sqlite_master where name = 'table_name'"
+callback的第三个参数
+另外,sqlite3是支持事务的
+int result;
+result = sqlite3_exec( db, "begin transaction", 0, 0, &zErrorMsg ); //开始一个事务
+result = sqlite3_exec( db, "commit transaction", 0, 0, &zErrorMsg ); //提交事务
+result = sqlite3_exec( db, "rollback transaction", 0, 0, &zErrorMsg ); //回滚事务
+
+
+
+
+

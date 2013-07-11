@@ -1,0 +1,27 @@
+make clean
+make[1]: Entering directory `/mnt/hgfs/target/smt_server/server_event/src'
+rm data_server linux_server  *.o *.d *.exe -rf
+make[1]: Leaving directory `/mnt/hgfs/target/smt_server/server_event/src'
+export TARGET=arm && make all install
+make[1]: Entering directory `/mnt/hgfs/target/smt_server/server_event/src'
+install -d /home/ko/stream_server
+arm-linux-gcc -O0 -g -Wall -static -I../include -L../lib/arm -o data_server zigbee_dev.c rbtree.c modules.c protocol.c buffer.c  events.c sqlite_db.c intelligent.c net_config.c iic.c tcp_server.c serial.c log.c smt_ev.c min_heap.c  -lm -lz -lstdc++ -lpthread -lsqlite3 -lmxml
+make[1]: Leaving directory `/mnt/hgfs/target/smt_server/server_event/src'
+make clean
+make[1]: Entering directory `/mnt/hgfs/target/smt_server/server_event/src'
+rm data_server linux_server  *.o *.d *.exe -rf
+make[1]: Leaving directory `/mnt/hgfs/target/smt_server/server_event/src'
+export TARGET=arm && make all install
+make[1]: Entering directory `/mnt/hgfs/target/smt_server/server_event/src'
+install -d /home/ko/stream_server
+arm-linux-gcc -O0 -g -Wall -static -I../include -L../lib/arm -o data_server zigbee_dev.c rbtree.c modules.c protocol.c buffer.c  events.c sqlite_db.c intelligent.c net_config.c iic.c tcp_server.c serial.c log.c smt_ev.c min_heap.c  -lm -lz -lstdc++ -lpthread -lsqlite3 -lmxml
+make[1]: Leaving directory `/mnt/hgfs/target/smt_server/server_event/src'
+make clean
+make[1]: Entering directory `/mnt/hgfs/target/smt_server/server_event/src'
+rm data_server linux_server  *.o *.d *.exe -rf
+make[1]: Leaving directory `/mnt/hgfs/target/smt_server/server_event/src'
+export TARGET=arm && make all install
+make[1]: Entering directory `/mnt/hgfs/target/smt_server/server_event/src'
+install -d /home/ko/stream_server
+arm-linux-gcc -O0 -g -Wall -static -I../include -L../lib/arm -o data_server zigbee_dev.c rbtree.c modules.c protocol.c buffer.c  events.c sqlite_db.c intelligent.c net_config.c iic.c tcp_server.c serial.c log.c smt_ev.c min_heap.c  -lm -lz -lstdc++ -lpthread -lsqlite3 -lmxml
+make[1]: Leaving directory `/mnt/hgfs/target/smt_server/server_event/src'

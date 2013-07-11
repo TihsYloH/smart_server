@@ -1,0 +1,28 @@
+[Global]
+CurrentProject=linux2.6.vpj
+[ProjectDates]
+linux2.6.vpj=20130411005243000
+[ActiveConfig]
+linux2.6.vpj=Debug
+[TreeExpansion2]
++@ linux2.6.vpj
+scroll:0
+[State]
+SCREEN: 1366 768 5 53 1126 648 0 0 M 0 0 0 0 734 688 0
+CWD: ../../linux-2.6.17.14
+FILEHIST: 9
+src/min_heap.c
+src/intelligent.c
+src/net_config.c
+src/net_config.h
+../../gpio.c
+src/iic.h
+src/iic.c
+../../../.slickedit/user.vlx
+../../../.slickedit/tbLayout.slk
+TBCLASS: 0 0
+DEBUG: 0 0 0 0 3 0 gdb
+printf
+strcpy
+std::*
+DEBUG2: 0

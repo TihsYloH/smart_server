@@ -1,0 +1,40 @@
+[Global]
+CurrentProject=smt_server.vpj
+[ProjectDates]
+smt_server.vpj=20130402084935000
+[ActiveConfig]
+smt_server.vpj=Debug
+[TreeExpansion2]
++@ smt_server.vpj
+scroll:0
+[State]
+SCREEN: 1366 768 5 53 1126 648 0 0 M 0 0 0 0 734 681 0
+CWD: ../../server_single
+BUFFER: BN="iic.h"
+BI: MA=1 74 1  TABS=1 9  WWS=1 IWT=0 ST=0 IN=2 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=C/C++	HM=0 MF=33554432 TL=0 MLL=0 ASE=0 LNL=1 LCF=6 CAPS=0 E=936 ESBU2=936 CL="" SC="" SCE= SCU=
+VIEW: LN=.0 CL=1 LE=0 CX=1 CY=0 WI=5 BI=10 HT=0 HN=0 HF=0 HC=4
+BUFFER: BN="iic.c"
+BI: MA=1 74 1  TABS=1 9  WWS=1 IWT=0 ST=0 IN=2 BW=0 US=32000 RO=0 SE=1 SN=0 BIN=0 MN=C/C++	HM=0 MF=50332512 TL=0 MLL=0 ASE=0 LNL=1 LCF=6 CAPS=0 E=936 ESBU2=936 CL="" SC="" SCE= SCU=
+VIEW: LN=.2160 CL=10 LE=0 CX=9 CY=18 WI=5 BI=11 HT=0 HN=0 HF=0 HC=4
+WINDOW: 0 0 606 480 0 0 N  WF=0 WT=1 ",,,"
+BUFFER: BN="iic.h"
+VIEW: LN=.0 CL=1 LE=0 CX=4 CY=0 WI=122 BI=10 HT=0 HN=0 HF=0 HC=4
+WINDOW: 0 0 735 682 0 0 M  WF=0 WT=3 ",,,"
+BUFFER: BN="iic.c"
+VIEW: LN=.2192 CL=9 LE=0 CX=12 CY=20 WI=124 BI=11 HT=0 HN=0 HF=0 HC=4
+FILEHIST: 9
+min_heap.c
+intelligent.c
+net_config.c
+net_config.h
+../../../gpio.c
+iic.h
+iic.c
+../../../../.slickedit/user.vlx
+../../../../.slickedit/tbLayout.slk
+TBCLASS: 0 0
+DEBUG: 0 0 0 0 3 0 gdb
+printf
+strcpy
+std::*
+DEBUG2: 0
