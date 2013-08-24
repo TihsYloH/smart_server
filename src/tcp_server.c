@@ -1012,87 +1012,7 @@ static int readFromSerial(serDescriptor *ser)
 
 
 
-/*
-static void * ackSerial(serial_des_t *pserial, serial_msg_t *pser_msg)
-{
-    struct timerList *timer;
-    Timer_Cmd *list = NULL;
-    uint16_t optCode;
-    uint64_t extAddr;
 
-   // optCode = pser_msg->dataHead.optCode;
-    //extAddr = pser_msg->extAddr;
-    optCode = optCode;
-    extAddr = extAddr;
-    switch (optCode) {
-    case 0x0000:
-
-
-        timer = serachForTimer(optCode, extAddr, &list);
-        if (!timer) {
-
-            log_error(LOG_NOTICE, "-----no timer found-----");
-            return NULL;
-        }
-
-        log_error(LOG_NOTICE, "----- timer callback run-----");
-
-
-        break;
-    case 0x0001:
-        break;
-    case 0x0002:
-        break;
-
-    case 0x8000:  //²éÑ¯ÎÂ¶È
-
-        printf("\nstart here\n");
-        timer = serachForTimer(optCode, extAddr, &list);
-        if (!timer)
-            break;
-
-
-        break;
-    default:
-        break;
-    }
-
-    return NULL;
-}
-
-
-static void * ackQuery(serial_des_t * pserial, serial_msg_t * pser_msg)
-{
-    return NULL;
-}
-
-static void * ackSet(serial_des_t * pserial, serial_msg_t * pser_msg)
-{
-    return NULL;
-}
-
-static void * ackUpload(serial_des_t * pserial, serial_msg_t * pser_msg)
-{
-    uint16_t optCode = optCode;
-    switch (optCode) {
-    case 0x0000:
-        break;
-    case 0x0001:
-        break;
-    case 0x0002:
-        break;
-    case 0x0003:
-        break;
-    case 0x8000:
-
-        break;
-    default:
-        break;
-    }
-
-    return NULL;
-}
-*/
 
 static int ser_cb(sqlite_db_t * sqlite, conn_sock_t * psock, void * arg, int size)
 {
@@ -1188,6 +1108,7 @@ static int disSerialPacket(serial_des_t *ser)
         if (module_no < MAX_MODULE_NO) {
             if (event_queue_push(g_zig_mod[module_no].level, NULL, ser_cb, pser_msg, pser_msg->msg_len) < 0) {
                 log_error(LOG_NOTICE, "event_queue_push");
+                break;
             }
         }
 

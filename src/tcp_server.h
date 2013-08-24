@@ -28,7 +28,7 @@
 #define     USE_IVOEC           //聚集些简化发送
 
 
-#define     MAX_RECV_ONCE       120
+#define     MAX_RECV_ONCE       512
 
 #define     DATA_PORT           7001        //数据连接端口
 
